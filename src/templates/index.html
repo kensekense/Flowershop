@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <a class="action" href="{{ url_for('index') }}">Home</a>
+  {% if g.user %}
+    <a class="action" href="{{ url_for('upload.create') }}">New Post</a>
+  {% endif %}
+  <h1>{% block title %}Posts{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  {% for post in posts %}
+    <article class="post">
+      <header>
+        <div>
+          <img src="{{url_for('static', filename='images/' + post['image'])}}">
+          <div class="about">by {{ post['username'] }} on {{ post['created'].strftime('%Y-%m-%d') }}</div>
+          <!--- <div class="fingerprint">FP: {{ post['fingerprint'] }}</div> --->
+        </div>
+        {% if g.user['id'] == post['author_id'] %}
+          <a class="action" href="{{ url_for('upload.update', id=post['id']) }}">Edit</a>
+        {% endif %}
+      </header>
+      <p class="body">{{ post['body'] }}</p>
+    </article>
+    {% if not loop.last %}
+      <hr>
+    {% endif %}
+  {% endfor %}
+{% endblock %}
