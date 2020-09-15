@@ -33,6 +33,11 @@ def index():
 def create():
     if request.method == "POST":
 
+        #Additional posting options BOOLEAN FLAGs
+        post_option = request.form.get('post_option')
+        if post_option is None:
+            post_option = "None"
+
         #image upload
         if 'file' not in request.files:
             flash('No file part.')
@@ -62,12 +67,15 @@ def create():
         if not body:
             error = "Post requires text."
 
-        #TODO: can alter the functionality to allow reposts but always anchor back to source.
-        #validation against fingerprints in database
+        #VALIDATION
         db = get_db()
         ticket = validate(text2fp(fingerprint), g.user['id'], db)
-        if not ticket[0]:
+        if not bool(ticket[0]):
             error = ticket[1]
+
+        if ticket[0] == "sponsor":
+            error = None
+            post_option = "sponsor"
 
         if error is not None:
             flash(error)
@@ -75,9 +83,9 @@ def create():
         else:
             db = get_db()
             db.execute(
-                'INSERT INTO post (author_id, image, body, cred, fingerprint)'
-                ' VALUES (?,?,?,?,?)',
-                (g.user['id'], image, body, cred, fingerprint)
+                'INSERT INTO post (author_id, image, body, cred, fingerprint, post_type)' #post_type: 'sponsor'
+                ' VALUES (?,?,?,?,?,?)',
+                (g.user['id'], image, body, cred, fingerprint, post_option)
             )
             db.commit()
             return redirect(url_for('upload.index'))

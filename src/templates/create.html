@@ -11,6 +11,11 @@
     <label for="body">Text</label>
       <textarea name="body" id="body">{{ request.form['body'] }}</textarea>
     <input type="submit" value="Save">
+
+    <!---TODO: put the checkmark/flags here?--->
+    <input type="radio" name="post_option" value="norepost"><label for="repost_FLAG">Regular post</label>
+    <input type="radio" name="post_option" value="sponsor"><label for="sponsor_FLAG">Sponsored multi-user post</label>
+
   </form>
   <a class="action" href="{{ url_for('upload.index') }}">Cancel</a>
 {% endblock %}

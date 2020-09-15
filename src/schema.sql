@@ -15,5 +15,6 @@ CREATE TABLE post (
   body TEXT NOT NULL,
   cred TEXT NOT NULL,
   fingerprint TEXT NOT NULL,
+  post_type TEXT NOT NULL,
   FOREIGN KEY (author_id) REFERENCES user (id)
 );

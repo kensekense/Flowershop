@@ -35,6 +35,7 @@ def create_app(test_config=None):
     db.init_app(app)
 
     #REGISTER BLUEPRINT
+    app.title = "Flowershop"
     app.register_blueprint(upload.upload)
     app.add_url_rule('/', endpoint='index')
     app.register_blueprint(auth.bp)
